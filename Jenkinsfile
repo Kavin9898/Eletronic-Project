@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -32,16 +31,28 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                dir('terraform') {
-                    sh 'terraform plan'
+                withCredentials([string(credentialsId: 'db-password', variable: 'DB_PASSWORD')]) {
+                    dir('terraform') {
+                        sh """
+                        terraform plan \
+                        -var="db_username=admin" \
+                        -var="db_password=${DB_PASSWORD}"
+                        """
+                    }
                 }
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                dir('terraform') {
-                    sh 'terraform apply -auto-approve'
+                withCredentials([string(credentialsId: 'db-password', variable: 'DB_PASSWORD')]) {
+                    dir('terraform') {
+                        sh """
+                        terraform apply -auto-approve \
+                        -var="db_username=admin" \
+                        -var="db_password=${DB_PASSWORD}"
+                        """
+                    }
                 }
             }
         }
