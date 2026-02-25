@@ -31,7 +31,7 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                withCredentials([string(credentialsId: 'db-password', variable: 'DB_PASSWORD')]) {
+                withCredentials([string(credentialsId: '@(kavin89)@', variable: 'DB_PASSWORD')]) {
                     dir('terraform') {
                         sh """
                         terraform plan \
@@ -45,7 +45,7 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                withCredentials([string(credentialsId: 'db-password', variable: 'DB_PASSWORD')]) {
+                withCredentials([string(credentialsId: '@(kavin89)@', variable: 'DB_PASSWORD')]) {
                     dir('terraform') {
                         sh """
                         terraform apply -auto-approve \
